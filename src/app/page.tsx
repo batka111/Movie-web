@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,118 +11,132 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import NavigationBar from "@/components/ui/NavigationBar";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { Popular } from "@/components/Popular";
+import Footer from "@/components/Footer";
+import { useState, useEffect } from "react";
+import { DataTwo } from "@/components/DataTwo";
+import { MovieCard } from "@/components/MovieCard";
+import { TopRated } from "@/components/TopRated";
 
+const token =
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
+type Movie = {
+  id: number;
+  title: string;
+  vote_average: number;
+  overview: string;
+  poster_path: string;
+};
+
+type MovieResponse = {
+  results: Movie[];
+};
 export default function Home() {
+  const [movies, setMovies] = useState<MovieResponse>({ results: [] });
+
+  const baseUrl = "https://api.themoviedb.org/3/movie";
+  useEffect(() => {
+    fetch(`${baseUrl}/upcoming?language=en-US&page=1`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMovies(data);
+      });
+  }, []);
+  const [moviess, setMoviess] = useState<MovieResponse>({ results: [] });
+  useEffect(() => {
+    fetch(`${baseUrl}/popular?language=en-US&page=1`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMoviess(data);
+      });
+  }, []);
+  const [moviesss, setMoviesss] = useState<MovieResponse>({ results: [] });
+  useEffect(() => {
+    fetch(`${baseUrl}/top_rated?language=en-US&page=1`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMoviesss(data);
+      });
+  }, []);
+
   return (
-    <div className="flex flex-col w-screen h-screen items-center ">
+    <div className="flex flex-col w-screen items-center gap-20">
       <NavigationBar />
-      <div className="flex w-screen h-screen">
-        <Carousel>
-          <CarouselContent className="flex w-screen m-0">
-            <CarouselItem className="p-0">
-              <div
-                style={{ backgroundImage: `url("/imgs/wicked.png")` }}
-                className="bg-no-repeat bg-cover bg-center flex w-screen relative h-[900px]"
-              >
-                <div className="w-[404px] h-[264px] gap-4 flex flex-col absolute bottom-[250px] left-[200px]">
-                  <div>
-                    <p className="text-[#FFFFFF]">Now Playing:</p>
-                    <h2 className="text-[#FFFFFF] font-bold text-4xl">
-                      Wicked
-                    </h2>
-                    <div>
-                      <p className="flex items-center text-[#FAFAFA] gap-1">
-                        <img src="/imgs/star.png" alt="" className=" w-7 h-7" />
-                        6.9<span className="text-[#71717A]">/10</span>
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-[#FAFAFA] text-xs w-[302px]">
-                    Elphaba, a misunderstood young woman because of her green
-                    skin, and Glinda, a popular girl, become friends at Shiz
-                    University in the Land of Oz. After an encounter with the
-                    Wonderful Wizard of Oz, their friendship reaches a
-                    crossroads.
-                  </p>
-                  <Button className="bg-[#fff] text-[#18181B] flex items-center justify-center w-[145px]">
-                    <img src="/imgs/play.png" alt="" className="w-4 h-4" />{" "}
-                    Watch Trailer
-                  </Button>
-                </div>
-              </div>
-            </CarouselItem>
-            <CarouselItem className="p-0">
-              <div
-                style={{ backgroundImage: `url("/imgs/glad.png")` }}
-                className="bg-no-repeat bg-cover bg-center flex w-screen relative h-[900px]"
-              >
-                <div className="w-[404px] h-[264px] gap-4 flex flex-col absolute bottom-[250px] left-[200px]">
-                  <div>
-                    <p className="text-[#FFFFFF]">Now Playing:</p>
-                    <h2 className="text-[#FFFFFF] font-bold text-4xl">
-                      Gladiator II
-                    </h2>
-                    <div>
-                      <p className="flex items-center text-[#FAFAFA] gap-1">
-                        <img src="/imgs/star.png" alt="" className=" w-7 h-7" />
-                        6.9<span className="text-[#71717A]">/10</span>
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-[#FAFAFA] text-xs w-[302px]">
-                    After his home is conquered by the tyrannical emperors who
-                    now lead Rome, Lucius is forced to enter the Colosseum and
-                    must look to his past to find strength to return the glory
-                    of Rome to its people.
-                  </p>
-                  <Button className="bg-[#fff] text-[#18181B] flex items-center justify-center w-[145px]">
-                    <img src="/imgs/play.png" alt="" className="w-4 h-4" />{" "}
-                    Watch Trailer
-                  </Button>
-                </div>
-              </div>
-            </CarouselItem>
-            <CarouselItem className="p-0">
-              <div
-                style={{ backgroundImage: `url("/imgs/moana.png")` }}
-                className="bg-no-repeat bg-cover bg-center flex w-screen relative h-[900px]"
-              >
-                <div className="w-[404px] h-[264px] gap-4 flex flex-col absolute bottom-[250px] left-[200px]">
-                  <div>
-                    <p className="text-[#FFFFFF]">Now Playing:</p>
-                    <h2 className="text-[#FFFFFF] font-bold text-4xl">Moana</h2>
-                    <div>
-                      <p className="flex items-center text-[#FAFAFA] gap-1">
-                        <img src="/imgs/star.png" alt="" className=" w-7 h-7" />
-                        6.9<span className="text-[#71717A]">/10</span>
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-[#FAFAFA] text-xs w-[302px]">
-                    After receiving an unexpected call from her wayfinding
-                    ancestors, Moana must journey to the far seas of Oceania and
-                    into dangerous, long-lost waters for an adventure unlike
-                    anything she's ever faced.
-                  </p>
-                  <Button className="bg-[#fff] text-[#18181B] flex items-center justify-center w-[145px]">
-                    <img src="/imgs/play.png" alt="" className="w-4 h-4" />{" "}
-                    Watch Trailer
-                  </Button>
-                </div>
-              </div>
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious className="absolute left-[150px]" />
-          <CarouselNext className="absolute right-[150px]" />
-        </Carousel>
+      <DataTwo />
+      <div className="bg-white flex w-screen">
+        <div className="flex flex-col m-auto  gap-8">
+          <div className="flex justify-between  ">
+            <h3 className="font-semibold text-2xl">Upcoming</h3>
+            <button className="flex justify-center items-center gap-2 h-9 py-2 px-4 rounded-md bg-[#fff] cursor-pointer ">
+              See more <img src="arrow-right.png" alt="" className=" w-4 h-4" />
+            </button>
+          </div>
+          <div className="grid grid-cols-5 gap-8 ">
+            {movies?.results?.slice(0, 10).map((movies) => {
+              return (
+                <MovieCard
+                  key={movies.id}
+                  image={movies.poster_path}
+                  rate={movies.vote_average}
+                  title={movies.title}
+                />
+              );
+            })}
+          </div>
+        </div>
       </div>
+      <div className="bg-white flex w-screen">
+        <div className="flex flex-col m-auto  gap-8">
+          <div className="flex justify-between  ">
+            <h3 className="font-semibold text-2xl">Popular</h3>
+            <button className="flex justify-center items-center gap-2 h-9 py-2 px-4 rounded-md bg-[#fff] cursor-pointer ">
+              See more <img src="arrow-right.png" alt="" className=" w-4 h-4" />
+            </button>
+          </div>
+          <div className="grid grid-cols-5 gap-8 ">
+            {moviess?.results?.slice(0, 10).map((moviess) => {
+              return (
+                <Popular
+                  key={moviess.id}
+                  image={moviess.poster_path}
+                  rate={moviess.vote_average}
+                  title={moviess.title}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="bg-white flex w-screen">
+        <div className="flex flex-col m-auto  gap-8">
+          <div className="flex justify-between  ">
+            <h3 className="font-semibold text-2xl">Top Rated</h3>
+            <button className="flex justify-center items-center gap-2 h-9 py-2 px-4 rounded-md bg-[#fff] cursor-pointer ">
+              See more{" "}
+              <img src="/imgs/arrow-right.png" alt="" className=" w-4 h-4" />
+            </button>
+          </div>
+          <div className="grid grid-cols-5 gap-8 ">
+            {moviesss?.results?.slice(0, 10).map((moviesss) => {
+              return (
+                <TopRated
+                  key={moviesss.id}
+                  image={moviesss.poster_path}
+                  rate={moviesss.vote_average}
+                  title={moviesss.title}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }
